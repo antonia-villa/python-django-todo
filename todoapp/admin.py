@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+# import models
+from .models import Todo
+# Register your models here --> with admin panel
+
+admin.site.register(Todo)

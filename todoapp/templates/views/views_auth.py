@@ -3,46 +3,6 @@ from django.contrib import auth
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Todo
-import requests
-import json
-
-# Main routes
-def index(request):
-    if request.method == "GET":
-        # TODO: Get user and todo info from database
-        todos = Todo.objects.all().order_by('text')
-        users = User.objects.all()
-        r = requests.get('http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1&callback=')
-        quote = json.loads(r.text)
-
-
-        return render(request, 'todoapp/index.html', { 'todos': todos, 'users': users, 'quote': quote[0]})
-    elif request.method == "POST":
-        try:
-            user_id  = request.POST['userid']
-        except (KeyValueError):
-            return render(request, 'todoapp/index.html', {'error': 'You must select a task owner', 'users': users, 'todos': todos})
-        else:
-        	new_todo = Todo()
-        	new_todo.text = request.POST['text']
-        	new_todo.user = User.objects.get(pk=user_id)
-        	new_todo.save()
-        	return redirect('index')
-
-
-def delete(request, todo_id):
-    item = Todo.objects.get(id=todo_id)
-    item.delete()
-    #Alternate syntax for delete
-    # Todo.objects.filter(id=todo_id).delete()
-    return redirect('index')
-
-def done(request, todo_id):
-    item = Todo.objects.get(id=todo_id)
-    item.is_complete = True
-    item.save()
-    return redirect('index')
-
 
 # Auth-related routes
 def signup(request):
@@ -83,20 +43,3 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return redirect('index')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

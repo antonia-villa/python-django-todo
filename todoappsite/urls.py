@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
+# Point everything to the todoapp URLS file inside todoapp folder
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('todoapp.urls'))
